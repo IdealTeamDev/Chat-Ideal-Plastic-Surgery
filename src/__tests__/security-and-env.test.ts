@@ -43,13 +43,20 @@ describe("Seguridad de variables de entorno (OWASP ASVS)", () => {
     ).toThrow(/ALERTA DE SEGURIDAD/);
   });
 
-  it("acepta una Publishable Key válida de Supabase", () => {
+  it("acepta una Publishable Key válida de Supabase (con NEXT_PUBLIC_SUPABASE_URL o SUPABASE_URL de Vercel)", () => {
     const parsed = parsePublicEnv({
       NEXT_PUBLIC_SUPABASE_URL: "https://example.supabase.co",
       NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY: "sb_publishable_test_public_key",
     });
 
     expect(isSupabasePublicConfigured(parsed)).toBe(true);
+
+    const parsedFromVercelIntegration = parsePublicEnv({
+      SUPABASE_URL: "https://example.supabase.co",
+      NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY: "sb_publishable_test_public_key",
+    });
+
+    expect(isSupabasePublicConfigured(parsedFromVercelIntegration)).toBe(true);
   });
 });
 

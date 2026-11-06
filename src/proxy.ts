@@ -27,7 +27,8 @@ export async function proxy(request: NextRequest) {
   const securityHeaders = buildSecurityHeaders({
     pathname: request.nextUrl.pathname,
     allowedWidgetOrigins,
-    supabaseUrl: process.env.NEXT_PUBLIC_SUPABASE_URL,
+    supabaseUrl:
+      process.env.NEXT_PUBLIC_SUPABASE_URL || process.env.SUPABASE_URL,
     isProduction: process.env.NODE_ENV === "production",
   });
 

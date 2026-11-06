@@ -51,12 +51,17 @@ export type PublicEnv = z.infer<typeof publicEnvSchema>;
 export function parsePublicEnv(
   rawEnv: Record<string, string | undefined> = {
     NEXT_PUBLIC_APP_URL: process.env.NEXT_PUBLIC_APP_URL,
-    NEXT_PUBLIC_SUPABASE_URL: process.env.NEXT_PUBLIC_SUPABASE_URL,
+    NEXT_PUBLIC_SUPABASE_URL:
+      process.env.NEXT_PUBLIC_SUPABASE_URL ?? process.env.SUPABASE_URL,
     NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY:
       process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY,
   }
 ): PublicEnv {
-  return publicEnvSchema.parse(rawEnv);
+  return publicEnvSchema.parse({
+    ...rawEnv,
+    NEXT_PUBLIC_SUPABASE_URL:
+      rawEnv.NEXT_PUBLIC_SUPABASE_URL || rawEnv.SUPABASE_URL,
+  });
 }
 
 export function isSupabasePublicConfigured(env?: PublicEnv): boolean {
